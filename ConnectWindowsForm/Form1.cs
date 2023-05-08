@@ -11,19 +11,21 @@ using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Data.SqlClient;
 using MySql.Data.MySqlClient;
+using Krypton.Toolkit;
+using System.Web.UI.WebControls;
 
 namespace ConnectWindowsForm
 {
-    public partial class Form1 : Form
+    public partial class Form1 : KryptonForm
     {
         public Form1()
         {
             InitializeComponent();
-            comboBox1.Items.Add("SQL Server");
-            comboBox1.Items.Add("MySQL");
+            kryptonComboBox1.Items.Add("SQL Server");
+            kryptonComboBox1.Items.Add("MySQL");
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void kryptonButton3_Click(object sender, EventArgs e)
         {
             openFileDialog1.InitialDirectory = "C://Desktop";
             openFileDialog1.Title = "Select file to be upload.";
@@ -36,9 +38,9 @@ namespace ConnectWindowsForm
                     if (openFileDialog1.CheckFileExists)
                     {
                         string path = Path.GetFullPath(openFileDialog1.FileName);
-                        textBox1.Text = path;
-                        string fileContents  = File.ReadAllText(textBox1.Text);
-                        richTextBox1.Text =fileContents;
+                        kryptonTextBox3.Text = path;
+                        string fileContents = File.ReadAllText(kryptonTextBox3.Text);
+                        richkryptonTextBox3.Text = fileContents;
                     }
                 }
                 else
@@ -50,20 +52,19 @@ namespace ConnectWindowsForm
             {
                 MessageBox.Show(ex.Message);
             }
-
         }
 
-        private void textBox2_TextChanged(object sender, EventArgs e)
+        private void button3_Click(object sender, EventArgs e)
         {
-
+            
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void kryptonButton1_Click(object sender, EventArgs e)
         {
             string connectionString = null;
-            if (comboBox1.SelectedItem == "SQL Server")
+            if (kryptonComboBox1.SelectedItem == "SQL Server")
             {
-                connectionString = textBox2.Text;
+                connectionString = kryptonkryptonTextBox3.Text;
                 try
                 {
                     using (SqlConnection cnn = new SqlConnection(connectionString))
@@ -77,9 +78,9 @@ namespace ConnectWindowsForm
                     MessageBox.Show("Error connecting to the database: " + ex.Message);
                 }
             }
-            else if(comboBox1.SelectedItem == "MySQL")
+            else if (kryptonComboBox1.SelectedItem == "MySQL")
             {
-                connectionString = textBox2.Text;
+                connectionString = kryptonkryptonTextBox3.Text;
                 try
                 {
                     using (MySqlConnection cnn = new MySqlConnection(connectionString))
@@ -95,14 +96,72 @@ namespace ConnectWindowsForm
             }
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void kryptonButton2_Click(object sender, EventArgs e)
+        {
+            string connectionString = null;
+            string TB = null;
+            string queryTB = null;
+            connectionString = kryptonkryptonTextBox3.Text;
+            TB = kryptonTextBox2.Text;
+            queryTB = "SELECT * FROM " + TB;
+            if (kryptonComboBox1.SelectedItem == "SQL Server")
+            {
+                try
+                {
+                    using (SqlConnection connection = new SqlConnection(connectionString))
+                    {
+                        connection.Open();
+
+                        using (SqlCommand command = new SqlCommand())
+                        {
+                            SqlDataAdapter adapter = new SqlDataAdapter();
+                            adapter.SelectCommand = new SqlCommand(queryTB, connection);
+                            DataTable table = new DataTable();
+                            adapter.Fill(table);
+                            kryptonDataGridView1.DataSource = table;
+                        }
+                        MessageBox.Show("SQL code executed successfully!");
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show("Error executing SQL code: " + ex.Message);
+                }
+            }
+            else if (kryptonComboBox1.SelectedItem == "MySQL")
+            {
+                try
+                {
+                    using (MySqlConnection connection = new MySqlConnection(connectionString))
+                    {
+                        connection.Open();
+
+                        using (MySqlCommand command = new MySqlCommand())
+                        {
+                            MySqlDataAdapter adapter = new MySqlDataAdapter();
+                            adapter.SelectCommand = new MySqlCommand(queryTB, connection);
+                            DataTable table = new DataTable();
+                            adapter.Fill(table);
+                            kryptonDataGridView1.DataSource = table;
+                        }
+                        MessageBox.Show("MySQL code executed successfully!");
+                    }
+                }
+                catch (MySqlException ex)
+                {
+                    MessageBox.Show("Error executing SQL code: " + ex.Message);
+                }
+            }
+        }
+
+        private void kryptonButton4_Click(object sender, EventArgs e)
         {
             string connectionString = null;
             string sql = null;
-            if (comboBox1.SelectedItem == "SQL Server")
+            if (kryptonComboBox1.SelectedItem == "SQL Server")
             {
-                connectionString = textBox2.Text;
-                sql = richTextBox1.Text;
+                connectionString = kryptonkryptonTextBox3.Text;
+                sql = richkryptonTextBox3.Text;
                 try
                 {
                     using (SqlConnection connection = new SqlConnection(connectionString))
@@ -121,10 +180,10 @@ namespace ConnectWindowsForm
                     MessageBox.Show("Error executing SQL code: " + ex.Message);
                 }
             }
-            else if (comboBox1.SelectedItem == "MySQL")
+            else if (kryptonComboBox1.SelectedItem == "MySQL")
             {
-                connectionString = textBox2.Text;
-                sql = richTextBox1.Text;
+                connectionString = kryptonkryptonTextBox3.Text;
+                sql = richkryptonTextBox3.Text;
                 try
                 {
                     using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -145,7 +204,7 @@ namespace ConnectWindowsForm
             }
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void Form1_Load(object sender, EventArgs e)
         {
 
         }
