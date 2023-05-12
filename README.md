@@ -1,5 +1,5 @@
 # ConnectWindowsForm
-© Lil Dlio
+**© Copyright by Lil Dlio**
 - This is my little project use windows form to connect SQL and MySQL.
 - Nutget Packages need:
   - System.Data.SqlClient;
